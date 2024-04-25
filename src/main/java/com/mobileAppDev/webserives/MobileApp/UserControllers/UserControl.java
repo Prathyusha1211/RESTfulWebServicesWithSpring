@@ -1,5 +1,5 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
-
+import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserControl {
 
     @GetMapping(value="/{userId}")
-    public String getUser(@PathVariable String userId){
-        return "get user was called with id "+userId;
+    public UserRest getUser(@PathVariable String userId){
+        UserRest user = new UserRest();
+        user.setFirstName("Prathyu");
+        user.setLastName("Melam");
+        user.setEmail("melam@gmail.com");
+        return user;
+        //return "get user was called with id "+userId;
     }
 
     @GetMapping()
