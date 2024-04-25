@@ -1,16 +1,10 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("users") // url is http://localhost:8080/users
+@RequestMapping("/users") // url is http://localhost:8080/users
 public class UserControl {
 
     @GetMapping(value="/{userId}")
@@ -19,8 +13,9 @@ public class UserControl {
     }
 
     @GetMapping()
-    public String getUser() {
-        return "get user was called";
+    public String getUser(@RequestParam(value = "page", defaultValue =
+    "0")int page,@RequestParam(value="limit", defaultValue = "20") int limit,@RequestParam(value="sort", defaultValue = "desc", required = true) String sort) {
+        return "get user was called with page "+page+" and limit "+limit+" and sort "+sort;
     }
 
     @PostMapping
