@@ -1,13 +1,16 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
 import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.awt.*;
 
 @RestController
 @RequestMapping("/users") // url is http://localhost:8080/users
 public class UserControl {
 
-    @GetMapping(value="/{userId}")
+    @GetMapping(value="/{userId}", produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public UserRest getUser(@PathVariable String userId){
         UserRest user = new UserRest();
         user.setFirstName("Prathyu");
