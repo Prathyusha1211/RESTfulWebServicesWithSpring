@@ -1,4 +1,5 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
+import com.mobileAppDev.webserives.MobileApp.ui.model.exceptions.UserServiceException;
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UpdateUserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
@@ -20,8 +21,12 @@ public class UserControl {
 
     Map<String, UserRest> users;
 
-    @GetMapping(value="/{userId}", produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value="/{userId}",
+            produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
+
+        if(true) throw new UserServiceException("user service exception was thrown");
+
         if(users.containsKey(userId)){
             return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
         }
@@ -33,8 +38,9 @@ public class UserControl {
     }
 
     @GetMapping()
-    public String getUser(@RequestParam(value = "page", defaultValue =
-    "0") int page,@RequestParam(value="limit", defaultValue = "20") int limit,@RequestParam(value="sort", defaultValue = "desc", required = true) String sort) {
+    public String getUser(@RequestParam(value = "page", defaultValue = "0") int page,
+                          @RequestParam(value="limit", defaultValue = "20") int limit,
+                          @RequestParam(value="sort", defaultValue = "desc", required = true) String sort) {
         return "get user was called with page "+page+" and limit "+limit+" and sort "+sort;
     }
 
