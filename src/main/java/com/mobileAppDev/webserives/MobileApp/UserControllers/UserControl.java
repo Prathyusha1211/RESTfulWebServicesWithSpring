@@ -1,25 +1,33 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
-//import javax.validation.Valid;
 import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/users") // url is http://localhost:8080/users
 public class UserControl {
 
+    Map<String, UserRest> users;
+
     @GetMapping(value="/{userId}", produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
-        UserRest user = new UserRest();
-        user.setFirstName("Prathyu");
-        user.setLastName("Melam");
-        user.setEmail("melam@gmail.com");
-        return new ResponseEntity<UserRest>(user, HttpStatus.OK);
+        if(users.containsKey(userId)){
+            return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
+        }
+
         //return "get user was called with id "+userId;
     }
 
@@ -35,9 +43,11 @@ public class UserControl {
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmail(userDetails.getEmail());
-        System.out.println("user name "+userDetails.getFirstName());
-        System.out.println("user name "+userDetails.getEmail());
-        System.out.println("user name "+userDetails.getPassword());
+
+        String userId= UUID.randomUUID().toString();
+        user.setUserId(userId);
+        if(users==null) users = new HashMap<>();
+        users.put(userId, user);
         return new ResponseEntity<UserRest>(user, HttpStatus.BAD_REQUEST);
         //return "create user was called";
     }
