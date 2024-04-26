@@ -15,12 +15,17 @@ import java.util.Date;
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value={Exception.class})
     public ResponseEntity<Object> handleAnyException(Exception ex, WebRequest request){
-
         String errorMsg = ex.getLocalizedMessage();
         if(errorMsg==null) errorMsg = ex.toString();
-
         ErrorMessage errorMessage = new ErrorMessage(new Date(),errorMsg);
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR) ;
+    }
 
+    @ExceptionHandler(value={NullPointerException.class})
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request){
+        String errorMsg = ex.getLocalizedMessage();
+        if(errorMsg==null) errorMsg = ex.toString();
+        ErrorMessage errorMessage = new ErrorMessage(new Date(),errorMsg);
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR) ;
     }
 
