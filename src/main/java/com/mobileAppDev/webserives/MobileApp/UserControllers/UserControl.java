@@ -1,4 +1,5 @@
 package com.mobileAppDev.webserives.MobileApp.UserControllers;
+import com.mobileAppDev.webserives.MobileApp.ui.model.request.UpdateUserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
 import jakarta.validation.Valid;
@@ -49,12 +50,15 @@ public class UserControl {
         if(users==null) users = new HashMap<>();
         users.put(userId, user);
         return new ResponseEntity<UserRest>(user, HttpStatus.BAD_REQUEST);
-        //return "create user was called";
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "update user was called";
+    @PutMapping(value="/{userId}",consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public UserRest updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
+        UserRest updateUserDetails = users.get(userId);
+        updateUserDetails.setFirstName(userDetails.getFirstName());
+        updateUserDetails.setLastName(userDetails.getLastName());
+        users.put(userId, updateUserDetails);
+        return updateUserDetails;
     }
 
     @DeleteMapping
