@@ -3,8 +3,10 @@ import com.mobileAppDev.webserives.MobileApp.ui.model.exceptions.UserServiceExce
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UpdateUserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.request.UserDetailsRequestModel;
 import com.mobileAppDev.webserives.MobileApp.ui.model.response.UserRest;
+import com.mobileAppDev.webserives.MobileApp.userservice.UserServiceImplementation;
 import jakarta.validation.Valid;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ import java.util.UUID;
 public class UserControl {
 
     Map<String, UserRest> users;
+
+    @Autowired
+    UserServiceImplementation userService;
 
     @GetMapping(value="/{userId}",
             produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
@@ -46,15 +51,8 @@ public class UserControl {
 
     @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
-        UserRest user = new UserRest();
-        user.setFirstName(userDetails.getFirstName());
-        user.setLastName(userDetails.getLastName());
-        user.setEmail(userDetails.getEmail());
 
-        String userId= UUID.randomUUID().toString();
-        user.setUserId(userId);
-        if(users==null) users = new HashMap<>();
-        users.put(userId, user);
+        UserRest user = userService.createUser(userDetails);
         return new ResponseEntity<UserRest>(user, HttpStatus.BAD_REQUEST);
     }
 
